@@ -3,6 +3,7 @@ from deepface import DeepFace
 
 # 감정을 3단계로 단순화한 레이블 정의
 emotion_labels = [
+    "Negative4",
     "Negative3",
     "Negative2",
     "Negative1",
