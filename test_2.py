@@ -33,7 +33,7 @@ current_emotion = "Neutral"
 # 감정을 단계별로 매핑하는 함수
 def map_emotions(emotion):
     mapping = {
-        "angry": "Negative3",
+        "angry": "Negative4",
         "disgust": "Negative3",
         "fear": "Negative2",
         "sad": "Negative1",
