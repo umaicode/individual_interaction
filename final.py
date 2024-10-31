@@ -33,7 +33,7 @@ def map_emotions(emotion):
 
 
 # 비디오 캡처 초기화
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
     ret, frame = cap.read()
