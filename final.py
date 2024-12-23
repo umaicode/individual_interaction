@@ -11,13 +11,12 @@ face_cascade = cv2.CascadeClassifier(
 
 # 가면 이미지 불러오기
 mask_images = {
-    "Negative": cv2.imread("disgust_face.png"),
+    "Negative": cv2.imread("negative_face.png"),
     "Neutral": cv2.imread("neutral_face.png"),
     "Positive": cv2.imread("happy_face.png"),
 }
 
 current_emotion = "Neutral"
-## mask_image = cv2.imread("positive3_face.png")  # 가면 이미지 경로
 
 
 # 감정을 단계별로 매핑하는 함수
@@ -33,7 +32,7 @@ def map_emotions(emotion):
 
 
 # 비디오 캡처 초기화
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
@@ -45,9 +44,15 @@ while True:
         gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)
     )
 
-    for x, y, w, h in faces:
+    # 가장 큰 얼굴만 선택
+    if len(faces) > 0:
+        # 얼굴 크기에 따라 정렬하여 가장 큰 얼굴만 선택
+        faces = sorted(faces, key=lambda x: x[2] * x[3], reverse=True)
+        x, y, w, h = faces[0]  # 가장 큰 얼굴만 사용
+
         face_roi = frame[y : y + h, x : x + w]
         try:
+            # 감정 분석 수행
             analysis = DeepFace.analyze(
                 face_roi, actions=["emotion"], enforce_detection=False
             )
@@ -76,12 +81,11 @@ while True:
         except Exception as e:
             print(f"Error analyzing face: {e}")
 
-    cv2.imshow("Real-time Emotion Detection", frame)
-    ##    cv2.imshow("Mask Image", mask_image)  # 추가된 이미지 창
-
     # 감정에 맞는 이미지 표시
     if current_emotion in mask_images and mask_images[current_emotion] is not None:
         cv2.imshow("Mask Image", mask_images[current_emotion])
+
+    cv2.imshow("Real-time Emotion Detection", frame)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break

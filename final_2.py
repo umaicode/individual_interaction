@@ -13,7 +13,7 @@ face_cascade = cv2.CascadeClassifier(
 
 # 가면 이미지 불러오기 (4K 사이즈 가면 이미지)
 mask_images = {
-    "Negative": cv2.imread("disgust_face.png"),  # 4K 이미지
+    "Negative": cv2.imread("negative_face.png"),  # 4K 이미지
     "Neutral": cv2.imread("neutral_face.png"),  # 4K 이미지
     "Positive": cv2.imread("happy_face.png"),  # 4K 이미지
 }
@@ -39,7 +39,7 @@ def map_emotions(emotion):
 
 
 # 비디오 캡처 초기화
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
@@ -90,7 +90,7 @@ while True:
 
     # 감정이 1초 이상 지속된 경우에만 마스크 이미지 표시
     elapsed_time = time.time() - emotion_start_time  # 감정이 지속된 시간 계산
-    if elapsed_time >= 1.0:  # 감정이 1초 이상 지속되었을 때
+    if elapsed_time >= 0.5:  # 감정이 1초 이상 지속되었을 때
         if current_emotion in mask_images and mask_images[current_emotion] is not None:
             mask_image = mask_images[current_emotion]
 
